@@ -2,6 +2,12 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 def analyze_performance(file_path):
+    """
+    Analyzes student performance data from a CSV file.
+    
+    Args:
+        file_path (str): Path to the input CSV file.
+    """
     print(f"Loading data from {file_path}...")
     try:
         df = pd.read_csv(file_path)
