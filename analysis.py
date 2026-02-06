@@ -20,29 +20,42 @@ def analyze_performance(file_path):
     print("\n--- Average Score by Subject ---")
     print(avg_score_subject)
 
-    # 2. Top Performing Student (Overall Average)
+    # 2. Pass Rate by Subject (Score >= 60)
+    pass_rate_subject = df[df['Score'] >= 60].groupby('Subject')['Score'].count() / df.groupby('Subject')['Score'].count() * 100
+    pass_rate_subject = pass_rate_subject.fillna(0) # Handle cases with 0 pass rate
+    print("\n--- Pass Rate by Subject (%) ---")
+    print(pass_rate_subject)
+
+    # 3. Top Performing Student (Overall Average)
     avg_score_student = df.groupby('Name')['Score'].mean().sort_values(ascending=False)
     top_student = avg_score_student.head(1)
     print("\n--- Top Performing Student ---")
     print(top_student)
 
-    # 3. Correlation between Attendance and Score
+    # 4. Correlation between Attendance and Score
     correlation = df['Attendance_Percentage'].corr(df['Score'])
     print(f"\n--- Correlation (Attendance vs Score) ---")
     print(f"Correlation Coefficient: {correlation:.2f}")
 
     # Visualization
-    plt.figure(figsize=(12, 5))
+    plt.figure(figsize=(15, 5))
 
     # Bar Chart: Average Score by Subject
-    plt.subplot(1, 2, 1)
+    plt.subplot(1, 3, 1)
     avg_score_subject.plot(kind='bar', color='teal')
     plt.title('Average Score by Subject')
     plt.ylabel('Average Score')
     plt.ylim(0, 100)
 
+    # Bar Chart: Pass Rate by Subject
+    plt.subplot(1, 3, 2)
+    pass_rate_subject.plot(kind='bar', color='lightgreen')
+    plt.title('Pass Rate by Subject (%)')
+    plt.ylabel('Pass Rate %')
+    plt.ylim(0, 100)
+
     # Scatter Plot: Attendance vs Score
-    plt.subplot(1, 2, 2)
+    plt.subplot(1, 3, 3)
     plt.scatter(df['Attendance_Percentage'], df['Score'], color='crimson')
     plt.title(f'Attendance vs Score (Corr: {correlation:.2f})')
     plt.xlabel('Attendance %')
