@@ -32,30 +32,44 @@ def analyze_performance(file_path):
     print("\n--- Top Performing Student ---")
     print(top_student)
 
-    # 4. Correlation between Attendance and Score
+    # 4. Grade Distribution
+    bins = [0, 59, 69, 79, 89, 100]
+    labels = ['F', 'D', 'C', 'B', 'A']
+    df['Grade'] = pd.cut(df['Score'], bins=bins, labels=labels, right=True)
+    grade_counts = df['Grade'].value_counts().sort_index(ascending=False)
+    print("\n--- Grade Distribution ---")
+    print(grade_counts)
+
+    # 5. Correlation between Attendance and Score
     correlation = df['Attendance_Percentage'].corr(df['Score'])
     print(f"\n--- Correlation (Attendance vs Score) ---")
     print(f"Correlation Coefficient: {correlation:.2f}")
 
-    # Visualization
-    plt.figure(figsize=(15, 5))
+    # Visualization: 2x2 Grid
+    plt.figure(figsize=(14, 10))
 
-    # Bar Chart: Average Score by Subject
-    plt.subplot(1, 3, 1)
+    # 1. Bar Chart: Average Score by Subject
+    plt.subplot(2, 2, 1)
     avg_score_subject.plot(kind='bar', color='teal')
     plt.title('Average Score by Subject')
     plt.ylabel('Average Score')
     plt.ylim(0, 100)
 
-    # Bar Chart: Pass Rate by Subject
-    plt.subplot(1, 3, 2)
+    # 2. Bar Chart: Pass Rate by Subject
+    plt.subplot(2, 2, 2)
     pass_rate_subject.plot(kind='bar', color='lightgreen')
     plt.title('Pass Rate by Subject (%)')
     plt.ylabel('Pass Rate %')
     plt.ylim(0, 100)
 
-    # Scatter Plot: Attendance vs Score
-    plt.subplot(1, 3, 3)
+    # 3. Pie Chart: Grade Distribution
+    plt.subplot(2, 2, 3)
+    grade_counts.plot(kind='pie', autopct='%1.1f%%', startangle=140, colors=['#66c2a5', '#fc8d62', '#8da0cb', '#e78ac3', '#a6d854'])
+    plt.title('Overall Grade Distribution')
+    plt.ylabel('')
+
+    # 4. Scatter Plot: Attendance vs Score
+    plt.subplot(2, 2, 4)
     plt.scatter(df['Attendance_Percentage'], df['Score'], color='crimson')
     plt.title(f'Attendance vs Score (Corr: {correlation:.2f})')
     plt.xlabel('Attendance %')
