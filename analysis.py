@@ -80,5 +80,10 @@ def analyze_performance(file_path):
     plt.savefig('performance_report.png')
     print("\nReport saved as 'performance_report.png'")
 
+    # Export Processed Data
+    output_file = 'processed_student_data.csv'
+    df.to_csv(output_file, index=False)
+    print(f"Processed data with grades saved to '{output_file}'")
+
 if __name__ == "__main__":
     analyze_performance('student_data.csv')
