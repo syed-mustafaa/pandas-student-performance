@@ -17,33 +17,23 @@ def analyze_performance(file_path):
 
     # 1. Average Score by Subject
     avg_score_subject = df.groupby('Subject')['Score'].mean().sort_values(ascending=False)
-    print("\n--- Average Score by Subject ---")
-    print(avg_score_subject)
 
     # 2. Pass Rate by Subject (Score >= 60)
     pass_rate_subject = df[df['Score'] >= 60].groupby('Subject')['Score'].count() / df.groupby('Subject')['Score'].count() * 100
     pass_rate_subject = pass_rate_subject.fillna(0) # Handle cases with 0 pass rate
-    print("\n--- Pass Rate by Subject (%) ---")
-    print(pass_rate_subject)
 
     # 3. Top Performing Student (Overall Average)
     avg_score_student = df.groupby('Name')['Score'].mean().sort_values(ascending=False)
     top_student = avg_score_student.head(1)
-    print("\n--- Top Performing Student ---")
-    print(top_student)
 
     # 4. Grade Distribution
     bins = [0, 59, 69, 79, 89, 100]
     labels = ['F', 'D', 'C', 'B', 'A']
     df['Grade'] = pd.cut(df['Score'], bins=bins, labels=labels, right=True)
     grade_counts = df['Grade'].value_counts().sort_index(ascending=False)
-    print("\n--- Grade Distribution ---")
-    print(grade_counts)
 
     # 5. Correlation between Attendance and Score
     correlation = df['Attendance_Percentage'].corr(df['Score'])
-    print(f"\n--- Correlation (Attendance vs Score) ---")
-    print(f"Correlation Coefficient: {correlation:.2f}")
 
     # Visualization: 2x2 Grid
     plt.figure(figsize=(14, 10))
